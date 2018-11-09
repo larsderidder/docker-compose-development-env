@@ -29,4 +29,5 @@ build:
 test-python:
   stage: test
   script:
-    - docker-compose -f docker-compose.common.yml -f docker-compose.prod.yml run --rm --entrypoint pytest
+    - docker-compose -f docker-compose.common.yml -f docker-compose.prod.yml pull python
+    - docker-compose -f docker-compose.common.yml -f docker-compose.prod.yml run --rm --entrypoint pytest python

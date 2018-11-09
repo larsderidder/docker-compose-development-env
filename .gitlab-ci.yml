@@ -21,10 +21,6 @@ build:
   script:
     - docker-compose -f docker-compose.common.yml -f docker-compose.prod.yml build
     - docker-compose -f docker-compose.common.yml -f docker-compose.prod.yml push
-  only:
-    - master
-  tags:
-    - docker
 
 test-python:
   stage: test

@@ -3,7 +3,7 @@ def main():
 
 
 def is_this_just_fantasy():
-    return False
+    return True
 
 
 if __name__ == '__main__':

@@ -1,0 +1,10 @@
+version: '2'
+
+services:
+  python:
+    image: $IMAGE/python:$TAG
+    restart: always
+
+  java:
+    image: $IMAGE/java:$TAG
+    restart: always

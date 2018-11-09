@@ -1,0 +1,19 @@
+stages:
+  - build
+
+variables:
+  TAG: $CI_BUILD_REF
+  IMAGE: $CI_REGISTRY_IMAGE
+
+build:
+  stage: build
+  services:
+      - docker:dind
+  script:
+    - docker login -u gitlab-ci-token -p $CI_BUILD_TOKEN $CI_REGISTRY_IMAGE
+    - docker-compose -f docker-compose.common.yml -f docker-compose.prod.yml build
+    - docker-compose -f docker-compose.common.yml -f docker-compose.prod.yml push
+  only:
+    - master
+  tags:
+    - docker

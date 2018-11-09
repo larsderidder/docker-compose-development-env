@@ -1,0 +1,53 @@
+version: '2'
+services:
+  python:
+    image: registry.gitlab.com/mycompany/myproject/python:dev
+    volumes:
+      - ./python/:/code
+    entrypoint: watchmedo auto-restart --recursive --pattern="*.py" --directory="." python mypackage/run.py
+    depends_on:
+      - postgres
+    links:
+      - postgres
+    environment:
+      - POSTGRES_USER=user
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_DB=myproject
+      - POSTGRES_HOST=postgres
+
+  python-tests:
+    image: registry.gitlab.com/mycompany/myproject/python:dev
+    volumes:
+      - ./python/:/code
+    entrypoint: watchmedo auto-restart --recursive --pattern="*.py" --directory="." pytest
+    depends_on:
+      - python
+
+  java:
+    image: registry.gitlab.com/mycompany/myproject/java:dev
+    volumes:
+      - ./java/:/usr/src/app
+    entrypoint: sh -c 'find src/ | entr mvn clean compile exec:java --batch-mode --quiet'
+    depends_on:
+      - postgres
+    links:
+      - postgres
+    environment:
+      - POSTGRES_USER=user
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_DB=myproject
+      - POSTGRES_HOST=postgres
+
+  postgres:
+    image: postgres:9.6
+    environment:
+      - POSTGRES_USER=user
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_DB=myproject
+    volumes:
+      - /data/aedspy/postgres:/var/lib/postgresql/data
+
+  pgadminer:
+    image: clue/adminer
+    ports: 
+      - "99:80"

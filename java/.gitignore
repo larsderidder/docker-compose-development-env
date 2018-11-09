@@ -2,3 +2,5 @@ out
 target
 .idea
 *.iml
+bin
+.settings
